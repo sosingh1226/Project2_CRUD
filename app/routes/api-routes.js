@@ -4,21 +4,11 @@ const db = require("../models");
 // Routes
 module.exports = (app) => {
   app.get("/api/comments", (req, res) => {
-    db.comments.findAll({}).then((dbComs) => res.json(dbComs));
+    db.comments.findAll({}).then((dbComs) => res.json(dbComs))
+    .catch((err) => res.json(err));
   });
 
-  // I want to count how many comments are in an article.
-  app.get("/api/comments/count", (req, res) => {
-    // let articleID = req.query.count;
-    // console.log(articleID + );
-    db.comments
-    .countAndFindAll({
-      where: {
-        article_id: "2"
-      }
-    }).then((dbComs) => res.json(dbComs));
-  });
-
+  // Posts user comment to database
   app.post("/api/comments", (req, res) => {
     console.log(req.body);
     db.comments
@@ -27,9 +17,11 @@ module.exports = (app) => {
         user_name: req.body.user_name,
         article_id: req.body.article_id
       })
-      .then((dbComs) => res.json(dbComs));
+      .then((dbComs) => res.json(dbComs))
+      .catch((err) => res.json(err));
   });
 
+  // Deletes Comments with the passed id
   app.delete("/api/comments/:id", (req, res) => {
     db.comments
       .destroy({
@@ -37,10 +29,11 @@ module.exports = (app) => {
           id: req.params.id,
         },
       })
-      .then((dbComs) => res.json(dbComs));
+      .then((dbComs) => res.json(dbComs))
+      .catch((err) => res.json(err));;
   });
 
-  //We might, probably will,  need to mdify this later
+  // Update function for existing comments (unused)
   app.put("/api/comments", (req, res) => {
     db.comments
       .update(req.body, {
@@ -48,26 +41,30 @@ module.exports = (app) => {
           comment: req.body.comment,
         },
       })
-      .then((dbComs) => res.json(dbComs));
+      .then((dbComs) => res.json(dbComs))
+      .catch((err) => res.json(err));
   });
 
+  // Populates an array with all article data
   app.get("/api/articles", (req, res) => {
     console.log("getting articles");
-    db.articles.findAll({}).then((dbArticles) => res.json(dbArticles));
+    db.articles.findAll({}).then((dbArticles) => res.json(dbArticles))
+    .catch((err) => res.json(err));
   });
 
-  // PROBLEM WITH date_revised NOT HAVING DEFAULT VALUE
+  // Posts articles
   app.post("/api/articles", (req, res) => {
-    console.log(req.body);
     db.articles
       .create({
         title: req.body.title,
         content: req.body.content,
         tags: req.body.tags,
       })
-      .then((dbArticles) => res.json(dbArticles));
+      .then((dbArticles) => res.json(dbArticles))
+      .catch((err) => res.json(err));
   });
 
+  // Deletes articles with the passed id
   app.delete("/api/articles/:id", (req, res) => {
     db.articles
       .destroy({
@@ -75,10 +72,11 @@ module.exports = (app) => {
           id: req.params.id,
         },
       })
-      .then((dbArticles) => res.json(dbArticles));
+      .then((dbArticles) => res.json(dbArticles))
+      .catch((err) => res.json(err));
   });
 
-  //THIS NEEDS TO BE FIXED
+  // Unused update method for updating existing articles
   app.put("/api/articles", (req, res) => {
     db.articles
       .update(req.body, {
@@ -86,15 +84,18 @@ module.exports = (app) => {
           id: req.body.id,
         },
       })
-      .then((dbArticles) => res.json(dbArticles));
+      .then((dbArticles) => res.json(dbArticles))
+      .catch((err) => res.json(err));
   });
 
+  // Obtains user data on get
   app.get("/api/user", (req, res) => {
     console.log("getting user");
-    db.user.findAll({}).then((dbUser) => res.json(dbUser));
+    db.user.findAll({}).then((dbUser) => res.json(dbUser))
+    .catch((err) => res.json(err));
   });
 
-  // Commented out for now
+  // Creation of a new User
   app.post("/api/user", (req, res) => {
     console.log(req.body);
     db.user
@@ -105,9 +106,11 @@ module.exports = (app) => {
         password: req.body.password,
         contribution: req.body.contribution,
       })
-      .then((dbUser) => res.json(dbUser));
+      .then((dbUser) => res.json(dbUser))
+      .catch((err) => res.json(err));
   });
 
+  // Deletion of existing user
   app.delete("/api/user/:id", (req, res) => {
     db.user
       .destroy({
@@ -115,9 +118,11 @@ module.exports = (app) => {
           id: req.params.id,
         },
       })
-      .then((dbUser) => res.json(dbUser));
+      .then((dbUser) => res.json(dbUser))
+      .catch((err) => res.json(err));
   });
 
+  // Update user info for example, changing email, display name, password, etc.
   app.put("/api/user", (req, res) => {
     db.user
       .update(req.body, {
@@ -125,6 +130,7 @@ module.exports = (app) => {
           id: req.body.id
         },
       })
-      .then((dbUser) => res.json(dbUser));
+      .then((dbUser) => res.json(dbUser))
+      .catch((err) => res.json(err));
   });
 };
